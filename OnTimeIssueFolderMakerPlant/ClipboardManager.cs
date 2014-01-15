@@ -25,7 +25,7 @@ namespace OnTimeIssueFolderMakerPlant
 
     public void OnClipboardTextChanged(string newClipboardValue)
     {
-      if (!Configuration.ActualConfig.ListenClipboard)
+      if (!Configuration.ActualConfig.ListenClipboardSetting.Value)
         return;
       Tuple<int, string> resolvedValue = OnTimeValueResolver.ResolveOnTimeValue(newClipboardValue);
       if (resolvedValue == null)
@@ -34,7 +34,7 @@ namespace OnTimeIssueFolderMakerPlant
         UIConfirmator.ActualConfirmator.ShowConfirmDialog("Create issue folder for {0}({1})?".FormatWith(resolvedValue.Item1, resolvedValue.Item2));
       if (resultCode == ResultCode.PermanentlyClose)
       {
-        Configuration.ActualConfig.ListenClipboard = false;
+        Configuration.ActualConfig.ListenClipboardSetting.Value = false;
         return;
       }
       if (resultCode != ResultCode.Yes) 

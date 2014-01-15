@@ -25,9 +25,9 @@ namespace OnTimeIssueFolderMakerPlant
     {
       var originalPath = "{0} - {1}".FormatWith(ticketInfo.Item1, ticketInfo.Item2);
       originalPath = NormalizeName(originalPath);
-      if (originalPath.Length <= Configuration.ActualConfig.FolderNameLimit)
+      if (originalPath.Length <= Configuration.ActualConfig.FolderNameLimitSetting.Value)
         return originalPath;
-      return originalPath.Substring(0, Configuration.ActualConfig.FolderNameLimit);
+      return originalPath.Substring(0, Configuration.ActualConfig.FolderNameLimitSetting.Value);
     }
 
     private string NormalizeName(string input)
@@ -48,7 +48,7 @@ namespace OnTimeIssueFolderMakerPlant
     {
       try
       {
-        string fullPath = Path.Combine(Configuration.ActualConfig.RootFolder, folderPath);
+        string fullPath = Path.Combine(Configuration.ActualConfig.RootFolderPathSetting.Value, folderPath);
         if (Directory.Exists(fullPath))
         {
           return fullPath;

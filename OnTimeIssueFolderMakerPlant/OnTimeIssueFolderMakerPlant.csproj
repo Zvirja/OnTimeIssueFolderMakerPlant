@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="TrayGarden">
       <HintPath>D:\myTools\TrayGarden\TrayGarden.exe</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

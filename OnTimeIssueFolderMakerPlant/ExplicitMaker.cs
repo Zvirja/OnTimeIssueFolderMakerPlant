@@ -11,7 +11,7 @@ using TrayGarden.Services.PlantServices.GlobalMenu.Core.ContextMenuCollecting;
 
 namespace OnTimeIssueFolderMakerPlant
 {
-  public class ExplicitMaker:IChangesGlobalIcon, IExtendsGlobalMenu
+  public class ExplicitMaker : IChangesGlobalIcon, IExtendsGlobalMenu
   {
     public static ExplicitMaker Maker = new ExplicitMaker();
     public INotifyIconChangerClient NotifyIconChangerClient { get; set; }
@@ -23,7 +23,7 @@ namespace OnTimeIssueFolderMakerPlant
 
     public bool FillProvidedContextMenuBuilder(IMenuEntriesAppender menuAppender)
     {
-      menuAppender.AppentMenuStripItem("Create issue folder based on clipboard",Resources.box_love,ProcessClipboardValue);
+      menuAppender.AppentMenuStripItem("Create issue folder based on clipboard", Resources.box_love, ProcessClipboardValue);
       menuAppender.AppentMenuStripItem("Open issue folders storage", Resources.box, OpenStorage);
       return true;
     }
@@ -32,7 +32,7 @@ namespace OnTimeIssueFolderMakerPlant
     {
       try
       {
-        Process.Start(Configuration.ActualConfig.RootFolder);
+        Process.Start(Configuration.ActualConfig.RootFolderPathSetting.Value);
       }
       catch
       {
@@ -44,7 +44,7 @@ namespace OnTimeIssueFolderMakerPlant
     {
       string clipboardText = ClipboardManager.Manager.Provider.GetCurrentClipboardText();
       Tuple<int, string> resolveOnTimeValue = OnTimeValueResolver.Resolver.ResolveOnTimeValue(clipboardText);
-      if (resolveOnTimeValue == null) 
+      if (resolveOnTimeValue == null)
       {
         NotifyIconChangerClient.SetIcon(Resources.empty);
         return;
@@ -63,7 +63,7 @@ namespace OnTimeIssueFolderMakerPlant
         }
         catch
         {
-          
+
         }
       }
     }

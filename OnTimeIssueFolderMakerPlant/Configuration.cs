@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TrayGarden.Reception.Services;
 using TrayGarden.Services.PlantServices.UserConfig.Core.Interfaces;
+using TrayGarden.Services.PlantServices.UserConfig.Core.Interfaces.TypeSpecific;
 
 namespace OnTimeIssueFolderMakerPlant
 {
@@ -14,36 +15,21 @@ namespace OnTimeIssueFolderMakerPlant
     public const string ListenClipboardSettingName = "Listen clipboard for values";
     public static Configuration ActualConfig = new Configuration();
 
-    public IUserSettingsBridge SettingsBridge { get; set; }
+    public IPersonalUserSettingsSteward SettingsSteward { get; set; }
 
-    public string RootFolder
+    public IStringUserSetting RootFolderPathSetting { get; protected set; }
+
+    public IIntUserSetting FolderNameLimitSetting { get; protected set; }
+
+    public IBoolUserSetting ListenClipboardSetting { get; protected set; }
+
+    public void StoreAndFillPersonalSettingsSteward(IPersonalUserSettingsSteward personalSettingsSteward)
     {
-      get { return SettingsBridge.GetUserSetting(FolderBasePathSettingName).StringValue; }
-    }
+      SettingsSteward = personalSettingsSteward;
+      RootFolderPathSetting = personalSettingsSteward.DeclareStringSetting(FolderBasePathSettingName, FolderBasePathSettingName, @"C:\ISSUES");
+      FolderNameLimitSetting = personalSettingsSteward.DeclareIntSetting(FolderNameLengthLimiSettingName, FolderNameLengthLimiSettingName, 65);
+      ListenClipboardSetting = personalSettingsSteward.DeclareBoolSetting(ListenClipboardSettingName, ListenClipboardSettingName, true);
 
-    public int FolderNameLimit
-    {
-      get { return SettingsBridge.GetUserSetting(FolderNameLengthLimiSettingName).IntValue; }
     }
-
-    public bool ListenClipboard
-    {
-      get { return SettingsBridge.GetUserSetting(ListenClipboardSettingName).BoolValue; }
-      set { SettingsBridge.GetUserSetting(ListenClipboardSettingName).BoolValue = value; }
-    }
-
-    public bool GetUserSettingsMetadata(IUserSettingsMetadataBuilder metadataBuilder)
-    {
-      metadataBuilder.DeclareStringSetting(FolderBasePathSettingName, "C:\\ISSUES");
-      metadataBuilder.DeclareIntSetting(FolderNameLengthLimiSettingName, 65);
-      metadataBuilder.DeclareBoolSetting(ListenClipboardSettingName, true);
-      return true;
-    }
-
-    public void StoreUserSettingsBridge(IUserSettingsBridge userSettingsBridge)
-    {
-      SettingsBridge = userSettingsBridge;
-    }
-
   }
 }
