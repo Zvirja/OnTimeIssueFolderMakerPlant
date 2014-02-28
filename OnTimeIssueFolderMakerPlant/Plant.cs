@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TrayGarden.Reception;
 
 namespace OnTimeIssueFolderMakerPlant
@@ -44,6 +45,7 @@ namespace OnTimeIssueFolderMakerPlant
 
     public void PostServicesInitialize()
     {
+      Task.Factory.StartNew(() => ClipboardManager.Manager.OnClipboardValueChangedForRelevance(ClipboardManager.Manager.NativeProvider.GetCurrentClipboardText()));
     }
 
     #endregion

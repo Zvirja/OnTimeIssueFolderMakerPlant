@@ -23,15 +23,26 @@ namespace OnTimeIssueFolderMakerPlant
 
     public ClipboardManager()
     {
-      this.OnTimeValueResolver = new OnTimeValueResolver();
+      this.OnTimeValueResolver = OnTimeValueResolver.Resolver;
     }
+
+    #endregion
+
+    #region Public Events
+
+    public event Action<string> ClipboardValueChangedForRelevance;
 
     #endregion
 
     #region Public Properties
 
-    public OnTimeValueResolver OnTimeValueResolver { get; set; }
-    public IClipboardProvider Provider { get; set; }
+    public IClipboardProvider NativeProvider { get; set; }
+
+    #endregion
+
+    #region Properties
+
+    protected OnTimeValueResolver OnTimeValueResolver { get; set; }
 
     #endregion
 
@@ -39,6 +50,7 @@ namespace OnTimeIssueFolderMakerPlant
 
     public void OnClipboardTextChanged(string newClipboardValue)
     {
+      this.OnClipboardValueChangedForRelevance(newClipboardValue);
       if (!Configuration.ActualConfig.ListenClipboardSetting.Value)
         return;
       Tuple<int, string> resolvedValue = this.OnTimeValueResolver.ResolveOnTimeValue(newClipboardValue);
@@ -69,9 +81,16 @@ namespace OnTimeIssueFolderMakerPlant
       }
     }
 
+    public virtual void OnClipboardValueChangedForRelevance(string obj)
+    {
+      Action<string> handler = this.ClipboardValueChangedForRelevance;
+      if (handler != null) handler(obj);
+    }
+
+
     public void StoreClipboardValueProvider(IClipboardProvider provider)
     {
-      this.Provider = provider;
+      this.NativeProvider = provider;
     }
 
     #endregion
