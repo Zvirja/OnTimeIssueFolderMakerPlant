@@ -13,20 +13,35 @@ namespace OnTimeIssueFolderMakerPlant
 {
   public class ExplicitMaker : IChangesGlobalIcon, IExtendsGlobalMenu
   {
+    #region Static Fields
+
     public static ExplicitMaker Maker = new ExplicitMaker();
+
+    #endregion
+
+    #region Public Properties
+
     public INotifyIconChangerClient NotifyIconChangerClient { get; set; }
 
-    public void StoreGlobalIconChangingAssignee(INotifyIconChangerClient notifyIconChangerClient)
-    {
-      NotifyIconChangerClient = notifyIconChangerClient;
-    }
+    #endregion
+
+    #region Public Methods and Operators
 
     public bool FillProvidedContextMenuBuilder(IMenuEntriesAppender menuAppender)
     {
-      menuAppender.AppentMenuStripItem("Create issue folder based on clipboard", Resources.box_love, ProcessClipboardValue);
-      menuAppender.AppentMenuStripItem("Open issue folders storage", Resources.box, OpenStorage);
+      menuAppender.AppentMenuStripItem("Create issue folder based on clipboard", Resources.box_love, this.ProcessClipboardValue);
+      menuAppender.AppentMenuStripItem("Open issue folders storage", Resources.box, this.OpenStorage);
       return true;
     }
+
+    public void StoreGlobalIconChangingAssignee(INotifyIconChangerClient notifyIconChangerClient)
+    {
+      this.NotifyIconChangerClient = notifyIconChangerClient;
+    }
+
+    #endregion
+
+    #region Methods
 
     private void OpenStorage(object sender, EventArgs e)
     {
@@ -36,7 +51,7 @@ namespace OnTimeIssueFolderMakerPlant
       }
       catch
       {
-        NotifyIconChangerClient.SetIcon(Resources.error);
+        this.NotifyIconChangerClient.SetIcon(Resources.error);
       }
     }
 
@@ -46,26 +61,27 @@ namespace OnTimeIssueFolderMakerPlant
       Tuple<int, string> resolveOnTimeValue = OnTimeValueResolver.Resolver.ResolveOnTimeValue(clipboardText);
       if (resolveOnTimeValue == null)
       {
-        NotifyIconChangerClient.SetIcon(Resources.empty);
+        this.NotifyIconChangerClient.SetIcon(Resources.empty);
         return;
       }
       string madeFolder = FolderMaker.Maker.MakeFolder(resolveOnTimeValue);
       if (madeFolder == null)
       {
-        NotifyIconChangerClient.SetIcon(Resources.error);
+        this.NotifyIconChangerClient.SetIcon(Resources.error);
       }
       else
       {
-        NotifyIconChangerClient.SetIcon(Resources.box_love);
+        this.NotifyIconChangerClient.SetIcon(Resources.box_love);
         try
         {
           Process.Start(madeFolder);
         }
         catch
         {
-
         }
       }
     }
+
+    #endregion
   }
 }

@@ -8,35 +8,44 @@ namespace OnTimeIssueFolderMakerPlant
 {
   public class Plant : IPlant, TrayGarden.Reception.IServicesDelegation
   {
-    public string HumanSupportingName { get; private set; }
-    public string Description { get; private set; }
-
+    #region Constructors and Destructors
 
     public Plant()
     {
-      HumanSupportingName = "Folder maker for OnTime ticket";
-      Description = "This plant allows to generate the folder for OnTime ticket.";
+      this.HumanSupportingName = "Folder maker for OnTime ticket";
+      this.Description = "This plant allows to generate the folder for OnTime ticket.";
     }
 
-    public void Initialize()
-    {
+    #endregion
 
-    }
+    #region Public Properties
 
-    public void PostServicesInitialize()
-    {
+    public string Description { get; private set; }
+    public string HumanSupportingName { get; private set; }
 
-    }
+    #endregion
+
+    #region Public Methods and Operators
 
     public List<object> GetServiceDelegates()
     {
       return new List<object>
       {
-        UIConfirmator.ActualConfirmator, 
+        UIConfirmator.ActualConfirmator,
         ClipboardManager.Manager,
         Configuration.ActualConfig,
         ExplicitMaker.Maker
       };
     }
+
+    public void Initialize()
+    {
+    }
+
+    public void PostServicesInitialize()
+    {
+    }
+
+    #endregion
   }
 }

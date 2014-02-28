@@ -13,21 +13,35 @@ namespace OnTimeIssueFolderMakerPlant
 {
   public class ClipboardManager : IClipboardListener, IClipboardWorks
   {
+    #region Static Fields
+
     public static ClipboardManager Manager = new ClipboardManager();
-    public IClipboardProvider Provider { get; set; }
-    public OnTimeValueResolver OnTimeValueResolver { get; set; }
+
+    #endregion
+
+    #region Constructors and Destructors
 
     public ClipboardManager()
     {
-      OnTimeValueResolver = new OnTimeValueResolver();
+      this.OnTimeValueResolver = new OnTimeValueResolver();
     }
 
+    #endregion
+
+    #region Public Properties
+
+    public OnTimeValueResolver OnTimeValueResolver { get; set; }
+    public IClipboardProvider Provider { get; set; }
+
+    #endregion
+
+    #region Public Methods and Operators
 
     public void OnClipboardTextChanged(string newClipboardValue)
     {
       if (!Configuration.ActualConfig.ListenClipboardSetting.Value)
         return;
-      Tuple<int, string> resolvedValue = OnTimeValueResolver.ResolveOnTimeValue(newClipboardValue);
+      Tuple<int, string> resolvedValue = this.OnTimeValueResolver.ResolveOnTimeValue(newClipboardValue);
       if (resolvedValue == null)
         return;
       var resultCode =
@@ -37,7 +51,7 @@ namespace OnTimeIssueFolderMakerPlant
         Configuration.ActualConfig.ListenClipboardSetting.Value = false;
         return;
       }
-      if (resultCode != ResultCode.Yes) 
+      if (resultCode != ResultCode.Yes)
         return;
       var madeFolder = FolderMaker.Maker.MakeFolder(resolvedValue);
       if (madeFolder == null)
@@ -57,8 +71,9 @@ namespace OnTimeIssueFolderMakerPlant
 
     public void StoreClipboardValueProvider(IClipboardProvider provider)
     {
-      Provider = provider;
+      this.Provider = provider;
     }
 
+    #endregion
   }
 }

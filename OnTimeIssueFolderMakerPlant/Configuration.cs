@@ -10,26 +10,40 @@ namespace OnTimeIssueFolderMakerPlant
 {
   public class Configuration : IUserConfiguration
   {
+    #region Constants
+
     public const string FolderBasePathSettingName = "Folders base path";
     public const string FolderNameLengthLimiSettingName = "Folder name length limit";
     public const string ListenClipboardSettingName = "Listen clipboard for values";
+
+    #endregion
+
+    #region Static Fields
+
     public static Configuration ActualConfig = new Configuration();
 
-    public IPersonalUserSettingsSteward SettingsSteward { get; set; }
+    #endregion
 
-    public IStringUserSetting RootFolderPathSetting { get; protected set; }
+    #region Public Properties
 
     public IIntUserSetting FolderNameLimitSetting { get; protected set; }
 
     public IBoolUserSetting ListenClipboardSetting { get; protected set; }
+    public IStringUserSetting RootFolderPathSetting { get; protected set; }
+    public IPersonalUserSettingsSteward SettingsSteward { get; set; }
+
+    #endregion
+
+    #region Public Methods and Operators
 
     public void StoreAndFillPersonalSettingsSteward(IPersonalUserSettingsSteward personalSettingsSteward)
     {
-      SettingsSteward = personalSettingsSteward;
-      RootFolderPathSetting = personalSettingsSteward.DeclareStringSetting(FolderBasePathSettingName, FolderBasePathSettingName, @"C:\ISSUES");
-      FolderNameLimitSetting = personalSettingsSteward.DeclareIntSetting(FolderNameLengthLimiSettingName, FolderNameLengthLimiSettingName, 65);
-      ListenClipboardSetting = personalSettingsSteward.DeclareBoolSetting(ListenClipboardSettingName, ListenClipboardSettingName, true);
-
+      this.SettingsSteward = personalSettingsSteward;
+      this.RootFolderPathSetting = personalSettingsSteward.DeclareStringSetting(FolderBasePathSettingName, FolderBasePathSettingName, @"C:\ISSUES");
+      this.FolderNameLimitSetting = personalSettingsSteward.DeclareIntSetting(FolderNameLengthLimiSettingName, FolderNameLengthLimiSettingName, 65);
+      this.ListenClipboardSetting = personalSettingsSteward.DeclareBoolSetting(ListenClipboardSettingName, ListenClipboardSettingName, true);
     }
+
+    #endregion
   }
 }
