@@ -18,28 +18,16 @@ namespace OnTimeIssueFolderMakerPlant.OnTime
 
     public Tuple<int, string> ResolveOnTimeValue(string headerValue)
     {
-      return this.ResolveOntime17(headerValue) ?? this.ResolveNewOntime(headerValue) ?? this.ResolveOldOntime(headerValue);
+      return this.ResolveNewOntime(headerValue) ?? this.ResolveNewOntime(headerValue, Environment.NewLine) ?? this.ResolveOldOntime(headerValue);
     }
 
     #endregion
 
     #region Methods
 
-    private Tuple<int, string> ResolveOntime17(string bufferValue)
+    private Tuple<int, string> ResolveNewOntime(string bufferValue, string separator = "\t")
     {
-      string[] strArray = bufferValue.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
-      if (strArray.Length != 2)
-        return null;
-      if (strArray[0].Length != 6)
-        return null;
-      int ticketID;
-      if (!int.TryParse(strArray[0], out ticketID))
-        return null;
-      return new Tuple<int, string>(ticketID, strArray[1].Trim());
-    }
-    private Tuple<int, string> ResolveNewOntime(string bufferValue)
-    {
-      string[] strArray = bufferValue.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+      string[] strArray = bufferValue.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
       if (strArray.Length != 2)
         return null;
       if (strArray[0].Length != 6)
